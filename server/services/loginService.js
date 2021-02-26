@@ -33,23 +33,24 @@ exports.authenticate = (credential)=>{
 
     //ternary operator to return user if true or return error messages if false
     const auth0 = authUser.user ? authUser.user : formatErrors(authUser);
+    return auth0;
+}
 
-    //error function to create errors warning for each field
-    const formatErrors = function(authUser){
-        //create error warning
-        let emailWarning = "";
-        let passwordWarning = "";
+//error function to create errors warning for each field
+const formatErrors = function(authUser){
+    //create error warning
+    let emailWarning = "";
+    let passwordWarning = "";
 
-        //warning message for email
-        if(authObj.validEmail === false){
-            emailWarning = "Invalid email entry.";
-        }
-
-        //warning message for password
-        if(authObj.validPassword === false){
-            passwordWarning = "Invalid password entry.";
-        }
-
-        return {user:null, emailWarning, passwordWarning}
+    //warning message for email
+    if(authObj.validEmail === false){
+        emailWarning = "Invalid email entry.";
     }
+
+    //warning message for password
+    if(authObj.validPassword === false){
+        passwordWarning = "Invalid password entry.";
+    }
+
+    return {user:null, emailWarning, passwordWarning}
 }

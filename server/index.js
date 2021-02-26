@@ -35,7 +35,7 @@ app.use(cookSession({
 
 //set up ejs to be the template engine 
 app.set("view engine", "ejs");
-app.set("view", path.join(__dirname, "./views"));
+app.set("views", path.join(__dirname, "./views"));
 
 //Middleware Serving Static Pages from client directory
 //second parameter is an configuration object of how we want
