@@ -11,6 +11,8 @@ const cookSession = require('cookie-session');
 
 //import login service
 const loginService = require("./services/loginService");
+//import signup service
+const signupService = require("./services/signupService");
 
 // create an instance of express
 const app = express();
@@ -90,6 +92,50 @@ app.post("/login", (req, res)=>{
   }
 
   const isValidUser = loginService.authenticate(credentials);
+  res.end();
+})
+
+//render signup get request
+app.get("/signup", (req, res)=>{
+  res.render("signup", {nameError:"", emailError:"", passwordError:""});
+});
+
+app.post("/signup", (req, res)=>{
+  const cred = {
+    fullName: req.body.fullName,
+    email: req.body.email,
+    password: req.body.password,
+    userId:""
+  }
+
+  const newUser = signupService.authenticate(cred);
+
+  //if newUserInfo has been returned
+  if(newUser === undefined){
+    // set a session value isValid
+    if(!req.session.isValid){
+      req.session.isValid = true;
+    }
+    res.redirect('login');
+  }else{
+    //if the errorObj was returned instead
+    res.render('signup', {
+      nameError:newUser.nameError, 
+      emailError:newUser.emailError,
+      passwordError:newUser.passwordError
+    });
+  }
+});
+
+app.post("/signup", (req, res)=>{
+  const credentials = {
+    fullName:req.body.fullName,
+    email:req.body.email,
+    password:req.body.password,
+    userId:""
+  }
+
+  const newUser = signupService.authenticate(credentials);
   res.end();
 })
 

@@ -5,7 +5,7 @@
     true will redirect user to the dashboard.html
 */
 
-//import files
+//import fileService
 const fileService = require('./fileService')
 
 exports.authenticate = (credential)=>{
@@ -44,12 +44,12 @@ const formatErrors = function(authObj){
 
     //warning message for email
     if(authObj.validEmail === false){
-        emailWarning = "Invalid email entry.";
+        emailWarning = "Invalid email entry. Please try again.";
     }
 
     //warning message for password
     if(authObj.validPassword === false){
-        passwordWarning = "Invalid password entry.";
+        passwordWarning = "Password does not match. Please try again.";
     }
 
     return {user:null, emailWarning, passwordWarning}

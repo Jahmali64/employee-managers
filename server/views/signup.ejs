@@ -18,17 +18,20 @@
       <header><h2 class="center">Sign Up For Your Free Trial Account</h2></header>
         <form id="register" action="/signup" method="POST">
           <div class="form-control">
-            <label for="fullname">Please enter your full name.</label>
-            <input id="fullname" type="text" name="fullname" placeholder="first and last name" value=""/>
+            <label for="fullName">Please enter your full name.</label>
+            <input id="fullName" type="text" name="fullName" placeholder="first and last name" value=""/>
+            <p class="warning"><%- nameError %></p>
           </div>
             <div class="form-control">
               <label for="email">Enter an valid email address</label>
               <input id="email" type="email" name="email" placeholder="email address for the account" value=""/>
+              <p class="warning"><%- emailError %></p>
             </div>
 
             <div class="form-control">
               <label for="password">Enter a secure password</label>
               <input id="password" type="password" name="password" placeholder="password for the account" value=""/>
+              <p class="warning"><%- passwordError %></p>
           </div>
 
           <div class="form-control">

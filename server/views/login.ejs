@@ -18,24 +18,26 @@
             <header class="form-header"><h2>Login Form</h2></header>
             <form id="login" action="/login" method="POST">
                 <div class="form-control">
-                    <label for="email">Account email address <span class="warning"><%- emailWarning %></span></label>
+                    <label for="email">Account email address</label>
                     <input
                         id="email"
                         type="email"
                         name="email"
                         placeholder="account@email.com"
-                        value="<%- email %>"
+                        value="<%-email%>"
                     />
+                    <p class="warning"><%- emailWarning %></p>
                 </div>
                 <div class="form-control">
-                    <label for="password">Account password <span class="warning"><%- passwordWarning %></span></label>
+                    <label for="password">Account password</label>
                     <input
                         id="password"
                         type="password"
                         name="password"
                         placeholder="account password "
-                        value="<%- password %>"
+                        value=""
                     />
+                    <p class="warning"><%- passwordWarning %></p>
                 </div>
                 <div class="form-control">
                     <button type="submit">login</button>
