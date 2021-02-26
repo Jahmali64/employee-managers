@@ -19,18 +19,18 @@
         <form id="register" action="/signup" method="POST">
           <div class="form-control">
             <label for="fullName">Please enter your full name.</label>
-            <input id="fullName" type="text" name="fullName" placeholder="first and last name" value=""/>
+            <input id="fullName" type="text" name="fullName" placeholder="first and last name" value="" required/>
             <p class="warning"><%- nameError %></p>
           </div>
             <div class="form-control">
               <label for="email">Enter an valid email address</label>
-              <input id="email" type="email" name="email" placeholder="email address for the account" value=""/>
+              <input id="email" type="email" name="email" placeholder="email address for the account" value="" required/>
               <p class="warning"><%- emailError %></p>
             </div>
 
             <div class="form-control">
               <label for="password">Enter a secure password</label>
-              <input id="password" type="password" name="password" placeholder="password for the account" value=""/>
+              <input id="password" type="password" name="password" placeholder="password for the account" value="" required/>
               <p class="warning"><%- passwordError %></p>
           </div>
 

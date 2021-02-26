@@ -1,8 +1,8 @@
 # Employee Manager Login
 
 ### Setting Up A Basic User Authentication System.
-Were going to setup a basic user login form to the dashboard.
-Restrict access to the dashboard.
+This simple application has a basic user login form which is set up to redirect to the dashboard once the correct login info is entered and as well as sign up form that redirects to the login once the form is completed with valid information.
+Access to the dashboard is restricted.
 
 
 ### Read files with Node.js
@@ -30,13 +30,13 @@ function writeFileContents = (filePath, data )=> {
 ```
 
 ### EJS Templates
-Today we are going to allow submissions from the login form. If the user email validates then we will grant access to the dashboard. Grab a new copy of the data folder from the teams folder. There is a file called users.json. That is the file mimics a database. We will read this file and see if the provided email matches the one in the users.json file.  
+If the user email and password validates for the login page then they are granted access to the dashboard. There is a file called users.json. That is the file that mimics a database. This application will read this file and see if the provided email and password matches the one in the users.json file.  
 
-To start we are going to install ejs. Make sure that you are in the server folder when you do this.
+Install ejs in the server folder.
 ```
   npm install ejs
 ```
-Now lets configure ejs as the templating engine we are going to use with our project.
+Configure ejs as the templating engine to use with this project.
 ```javascript
 const ejs = require('ejs')
 app.set('view engine', 'ejs');
