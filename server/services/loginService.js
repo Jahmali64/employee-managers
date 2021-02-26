@@ -37,7 +37,7 @@ exports.authenticate = (credential)=>{
 }
 
 //error function to create errors warning for each field
-const formatErrors = function(authUser){
+const formatErrors = function(authObj){
     //create error warning
     let emailWarning = "";
     let passwordWarning = "";
