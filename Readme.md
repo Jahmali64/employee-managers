@@ -29,12 +29,6 @@ function writeFileContents = (filePath, data )=> {
 }
 ```
 
-
-
-
-
-
-
 ### EJS Templates
 Today we are going to allow submissions from the login form. If the user email validates then we will grant access to the dashboard. Grab a new copy of the data folder from the teams folder. There is a file called users.json. That is the file mimics a database. We will read this file and see if the provided email matches the one in the users.json file.  
 
