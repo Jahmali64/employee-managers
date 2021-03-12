@@ -1,56 +1,54 @@
 /* 
-    Login Service Will Authenticate an email and password
-    return a true or false response.
-    false returns will keep users on the login page with errors
-    true will redirect user to the dashboard.html
+  Login Service Will Authenticate an email and password
+  return a true or false response.
+  false returns will keep users on the login page with errors
+  true will redirect user to the dashboard.html
 */
-
-//import fileService
 const fileService = require('./fileService')
-
+ 
+// common js module  import === require
+// export import es modules  Browser...
+// exports or module.exports  requre commonjs  NODE (BUNDLER RUN BROWSER)
 exports.authenticate = (credential)=>{
-    const {email, password} = {...credential}
-    const users = fileService.getFileContents('../data/users.json');
+ 
+   const {email, password} = {...credential}
+   const users = fileService.getFileContents('../data/users.json');
+   // flush the authentication
+   
+ const authUser =  users.reduce((authObj, user)=>{
+     
+    if(user.email === email){
+      authObj.validEmail = true;
+    }else{
+       // errorObj
+    }
 
-    //authUser = {validEmail, validPassword, user}
-    const authUser = users.reduce((authObj, user)=>{
-        //authentication check for email
-        if(user.email === email){
-            authObj.validEmail = true;
-        }
-        //authentication check for password
-        if(user.password === password){
-            authObj.validPassword = true;
-        }
-        //authentication check for user
-        if(authObj.validEmail === true && authObj.validPassword === true){
-            authObj.user = user;
-        }
+    if(user.password === password){
+      authObj.validPassword = true;
+    }else{
+      // passwordError authObj.passwordError = "something"
+    }
 
-        return authObj;
+    if(authObj.validEmail===true && authObj.validPassword===true){
+        authObj.user = user;
+    }
+         
+    return authObj
 
-    }, {validEmail:false, validPassword:false, user:null})
+   }, {validEmail:false, validPassword:false, user:null})
 
-    //ternary operator to return user if true or return error messages if false
-    const auth0 = authUser.user ? authUser.user : formatErrors(authUser);
-    return auth0;
+     
+   const auth0 = authUser.user ? {user:authUser.user}: formatErrors(authUser);
+   return auth0
+
 }
+ 
+const formatErrors = function(user){
+  let passwordWarning = ""
+  let emailWarning = ""
 
-//error function to create errors warning for each field
-const formatErrors = function(authObj){
-    //create error warning
-    let emailWarning = "";
-    let passwordWarning = "";
+  if(user.validPassword === false){passwordWarning= `password doesn't seem to be correct`}
+  if(user.validEmail === false){ emailWarning= `email doesn't seem to be correct`}
 
-    //warning message for email
-    if(authObj.validEmail === false){
-        emailWarning = "Invalid email entry. Please try again.";
-    }
-
-    //warning message for password
-    if(authObj.validPassword === false){
-        passwordWarning = "Password does not match. Please try again.";
-    }
-
-    return {user:null, emailWarning, passwordWarning}
+  return {user:null, emailWarning, passwordWarning}
 }

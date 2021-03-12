@@ -1,18 +1,35 @@
-//read and write file
+/* 
+       Read and Write File Utility
+       Commonjs Modules
+       exports.funcName = ()=>{}
+
+       import
+       require('module name)
+    
+*/
 
 const fs = require('fs')
 const path = require('path')
 
-//create function to get file data
+
 exports.getFileContents = (filePath)=>{
-    let fileContents = JSON.parse(fs.readFileSync(path.join(__dirname, filePath)));
-    return fileContents;
+   let fileContents = JSON.parse(fs.readFileSync(path.join(__dirname, filePath)))
+   return fileContents
 }
 
-//create function to write to file data
 exports.writeFileContents = (filePath, data) =>{
-    let fileContents = JSON.parse(fs.readFileSync(path.join(__dirname, filePath)));
-    fileContents.push(data);
-    fileContents = JSON.stringify(fileContents);
-    fs.writeFileSync(path.join(__dirname, filePath), fileContents);
+    let fileContents = getFileContents(filePath)
+    fileContents.push(data)
+    fileContents = JSON.stringify(fileContents)
+    fs.writeFileSync(path.join(__dirname, filePath), fileContents)
 }
+
+exports.writeDataToFile = (filePath, data) => {
+    const fileContents = JSON.stringify(data)
+    fs.writeFileSync(path.join(__dirname, filePath), fileContents)
+}
+
+
+ 
+
+ 

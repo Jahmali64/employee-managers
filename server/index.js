@@ -1,143 +1,115 @@
-// import dotenv package to read the properties in the .env file.
-require('dotenv').config();
-
+// require dotenv package to read the properties in the .env file.
+// never upload .env file to git.
+require('dotenv').config()
 //import the express module
 const express = require('express');
-
 // import the path utils from Node.
-const path = require('path');
-const cors = require("cors");
-const cookSession = require('cookie-session');
+const path = require('path')
+const cors = require('cors')
+const cookSession = require('cookie-session')
 
-//import login service
-const loginService = require("./services/loginService");
-//import signup service
-const signupService = require("./services/signupService");
+// Importing our Login Service Used With the POST Login Route
+const loginService = require('./services/loginService')
+const departmentRoutes = require('./routes/departmentRouter')
+
 
 // create an instance of express
-const app = express();
-
+const app = express()
+ 
 // read the value of PORT NODE_EVN variable in the .env file
 // when the index.js file starts up this file is read in and
 // we can set configuration variables for the application.
-const PORT =  process.env.PORT || 5000
-
+// never upload to git...
+const PORT =  process.env.PORT || 5000 
+ 
+ 
 // Middleware For Cross Origin Resource SHaring
-app.use(cors());
+app.use(cors())
 
 //To get access to the name value pairs send in the message Body of POST Request.
-app.use(express.urlencoded({extended:true}));
-app.use(express.json());
+ app.use(express.urlencoded({extended:false}))
+ app.use(express.json())
+ app.use(express.raw())
 
-// Session Middleware
-app.use(cookSession({
-  name:"session",
-  keys:['SDFLU9iw2308dlsfuwe2adfl', 'LDFA34gsdfgFOPW2323DA7FS2']
-}));
+ // Session Middleware
+ app.use(cookSession({
+   name:"session",
+   keys:['SDFLU9iw2308dlsfuwe2adfl', 'LDFA34gsdfgFOPW2323DA7FS2']
+ }))
 
-//set up ejs to be the template engine 
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "./views"));
+ // Setup Template Engine
+ app.set('view engine', 'ejs')
+ app.set('views', path.join(__dirname, './views'))
+ 
 
 //Middleware Serving Static Pages from client directory
-//second parameter is an configuration object of how we want
-//the static file server to run.
-app.use(express.static(path.join(__dirname, "../client"), {extensions: ["html", 'htm']}));
+// second parameter is an configuration object of how we want
+// the static file server to run.
+ 
+app.use(express.static(path.join(__dirname, `../www`), {extensions: ["html", 'htm']})
+);
 
- //creating a protected route
-app.get('/dashboard', (req, res)=>{
-  if(req.session.isValid){
-    res.render('dashboard')
-  }else{
-    res.redirect('/login')
-  }
-});
+ 
+ // Routing Middleware.  
+ // login route.
+ // Access Form Data uses the POST method from the req body.
+ // Tell Express that you want to access POST Request body
+ // Setup   app.use(express.urlencoded({extended:true}))
 
-//render login get request
-app.get("/login", (req, res)=>{
-  res.render("login", {passwordWarning:"", emailWarning:"", email:"", password:""});
-});
+ // Basic Example of a Protected Route
+ app.get('/dashboard', (req, res)=>{
+          if(req.session.isValid){
+            res.render('dashboard')
+          }else{
+           res.redirect('/login')
+          }
+ })
 
-app.post("/login", (req, res)=>{
-  const cred = {
-    email: req.body.email,
-    password: req.body.password
-  }
+ app.get('/login', (req, res)=>{
+   // user template placed inside the views directory
+   // res.render(view, data)   ejs.render(template, {data})
+   res.render('login', {passwordWarning:"", emailWarning:"", email:"", password:""})
 
-  const isValidUser = loginService.authenticate(cred);
-
-  //if the isValidUser has a user returned
-  if( isValidUser.user !== null){
-    // set a session value isValid
-    if(!req.session.isValid){
-      req.session.isValid = true;
-    }
-    res.redirect('dashboard');
-  }
-
-  if(isValidUser.user === null){
-    res.render('login', {
-      emailWarning:isValidUser.emailWarning, 
-      passwordWarning:isValidUser.passwordWarning,
+ })
+ app.post('/login', (req, res)=>{
+   // if your incomming name value pairs are alot then create an object
+    const credentials = {
       email:req.body.email,
       password:req.body.password
-    });
-  }
-});
-
-app.post("/login", (req, res)=>{
-  const credentials = {
-    email:req.body.email,
-    password:req.body.password
-  }
-
-  const isValidUser = loginService.authenticate(credentials);
-  res.end();
-})
-
-//render signup get request
-app.get("/signup", (req, res)=>{
-  res.render("signup", {nameError:"", emailError:"", passwordError:""});
-});
-
-app.post("/signup", (req, res)=>{
-  const cred = {
-    fullName: req.body.fullName,
-    email: req.body.email,
-    password: req.body.password,
-    userId:""
-  }
-
-  const newUser = signupService.authenticate(cred);
-
-  //if newUserInfo has been returned
-  if(newUser === undefined){
-    // set a session value isValid
-    if(!req.session.isValid){
-      req.session.isValid = true;
     }
-    res.redirect('login');
-  }else{
-    //if the errorObj was returned instead
-    res.render('signup', {
-      nameError:newUser.nameError, 
-      emailError:newUser.emailError,
-      passwordError:newUser.passwordError
-    });
-  }
-});
+    // isValidUser returns {user:null, emailWarning, passwordWarning}
+    // isValudUser.user !=null...
+    const isValidUser =  loginService.authenticate(credentials)
+   
+       //if the isValidUser has a user returned
+       if( isValidUser.user !== null){
+             // set a session value isValid
+             if(!req.session.isValid){
+                 req.session.isValid = true;
+             }
+             res.redirect('dashboard')
+       }
 
-app.post("/signup", (req, res)=>{
-  const credentials = {
-    fullName:req.body.fullName,
-    email:req.body.email,
-    password:req.body.password,
-    userId:""
-  }
+       if(isValidUser.user === null){
+           // req.body.email, req.body.password
+           res.render('login', {
+             emailWarning:isValidUser.emailWarning, 
+             passwordWarning:isValidUser.passwordWarning,
+             email:req.body.email,
+             password:req.body.password
+            })
+       }
+  })
+    
+ app.get('/users', (req, res)=>{
+     // read using the file service
+     // return as json
+     const date = fileService.readFile('../data/user.json')
+     res.json(data)
+ })
 
-  const newUser = signupService.authenticate(credentials);
-  res.end();
-})
+
+ app.use('/api/departments', departmentRoutes())
 
 // Final Middleware 
 // Catch all for any request not handled while express was
@@ -147,7 +119,9 @@ app.use((req, res) => {
   res.status(404).sendFile(path.join(__dirname, "../client/404.html"));
 });
 
-// Tell express app to listen for incoming request on a specific PORT
+
+
+// Tell express app to listen for incomming request on a specific PORT
 app.listen(PORT, () => {
   console.log(`server started on http://localhost:5000`);
 });
